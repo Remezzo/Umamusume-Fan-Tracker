@@ -1,0 +1,12 @@
+# Club Manager — dependencies (Python 3.10+, tested on 3.13)
+#
+# Data comes from uma.moe's documented API using an API key, so this is plain
+# HTTP throughout: no selenium, no chromedriver, no browser at all.
+
+requests>=2.32.0          # the API calls and the Discord webhook
+Pillow>=10.0.0            # renders the leaderboard and report images
+
+# Optional — only needed if you keep the club list in a Google Spreadsheet.
+# Safe to leave installed; nothing loads them unless credentials are present.
+gspread>=6.1.0
+google-auth>=2.30.0

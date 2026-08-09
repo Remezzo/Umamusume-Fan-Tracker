@@ -1,0 +1,74 @@
+{
+  "_README": "You do not need to edit this by hand — run start.bat and use the web UI, which writes config.json for you. circle_id is the number in the club's uma.moe URL (https://uma.moe/circles/717148109 -> 717148109). viewer_id is a trainer UID (9-12 digits). webhooks holds one or more Discord webhook URLs; the first is the main one and the same post goes to all of them. quota is the daily fan target per member. network_id links a club to an entry in networks. mention pings on post: paste a role ID and it is wrapped to <@&id> for you. milestones lists the lifetime marks worth celebrating. Keep this file private: it holds your webhooks and your uma.moe API key.",
+  "settings": {
+    "umamoe_api_key": "",
+    "schedule_enabled": false,
+    "schedule_time": "09:30",
+    "weekly_enabled": false,
+    "weekly_day": 0,
+    "weekly_time": "10:00",
+    "monthly_enabled": false,
+    "monthly_day": 2,
+    "monthly_time": "10:30",
+    "retry_minutes": 20,
+    "max_retries": 6,
+    "port": 8770,
+    "post_summary_embed": false,
+    "image_scale": 2,
+    "image_layout": "tall",
+    "auto_open_browser": true,
+    "check_for_updates": true,
+    "start_with_windows": false,
+    "roster_alerts": true,
+    "show_projection": true,
+    "milestones": {
+      "enabled": true,
+      "member": [1000000, 5000000, 10000000, 25000000, 50000000, 100000000,
+                 250000000, 500000000, 1000000000, 2000000000, 5000000000],
+      "club": [100000000, 500000000, 1000000000, 5000000000, 10000000000,
+               25000000000, 50000000000, 100000000000]
+    },
+    "highlights": {
+      "lifetime_fans": 0,
+      "daily_change": 0,
+      "average": 0,
+      "current_fans": 0
+    }
+  },
+  "networks": [
+    {
+      "id": "example-net",
+      "name": "My Network",
+      "webhook": "",
+      "webhooks": [],
+      "post_combined": false,
+      "mention": ""
+    }
+  ],
+  "clubs": [
+    {
+      "id": "example",
+      "enabled": true,
+      "circle_id": "REPLACE_WITH_YOUR_CLUB_ID",
+      "club_name": "My Club",
+      "quota": 2000000,
+      "webhook": "REPLACE_WITH_YOUR_DISCORD_WEBHOOK_URL",
+      "webhooks": [],
+      "server": "en",
+      "mention": "",
+      "network_id": "",
+      "highlights": {}
+    }
+  ],
+  "players": [
+    {
+      "id": "example-player",
+      "viewer_id": "",
+      "label": "",
+      "webhook": "",
+      "webhooks": [],
+      "mention": "",
+      "notes": ""
+    }
+  ]
+}
