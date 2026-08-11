@@ -1,182 +1,226 @@
-Club Manager
-============
-Part of the Icarus Suite.
+<div align="center">
 
-Tracks Umamusume clubs and trainers from uma.moe and posts matte-black
-leaderboard images to Discord. Managed from a web UI in your browser.
+# Club Manager
 
+### A fan tracker for Umamusume clubs.
 
-GETTING STARTED
----------------
-  1. Double-click  setup.bat        (installs Python packages; once only)
-  2. Double-click  start.bat        (opens Club Manager in your browser)
-  3. Sign in at https://uma.moe, open https://uma.moe/settings, generate an
-     API key, and paste it into the box on the Dashboard.
-  4. Go to "Clubs" and add a club:
-       Club ID   the number in the club's uma.moe URL
-                 https://uma.moe/circles/717148109  ->  717148109
-       Webhook   Discord: Server Settings > Integrations > Webhooks >
-                 New Webhook > Copy Webhook URL
-       Quota     daily fan target per member
-  5. Click "Preview" to check it, then "Post now" to send it.
+It reads your club's numbers from [uma.moe](https://uma.moe) and posts a clean daily
+fan leaderboard to Discord — automatically, every day, with no spreadsheets and
+nothing to keep open.
 
-uma.moe issues API keys for integrations like this, so nothing has to be
-clicked and it runs unattended. Treat the key like a password: it lives in
-config.json alongside your webhooks.
+Part of the **Icarus Suite**
 
+[![Download](https://img.shields.io/badge/⬇_Download-latest%20release-4ade80?style=for-the-badge)](https://github.com/Remezzo/Umamusume-Fan-Tracker/releases/latest)
+[![Version](https://img.shields.io/badge/version-1.0.0-ededed?style=for-the-badge)](https://github.com/Remezzo/Umamusume-Fan-Tracker/releases/latest)
+[![License](https://img.shields.io/badge/license-proprietary-9a9a9a?style=for-the-badge)](LICENSE)
+[![Discord](https://img.shields.io/badge/Discord-join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/wpbd3hTBDc)
 
-WHAT IT DOES
-------------
-  Daily board      One image per club: every member ranked by Carry Over,
-                   with their lifetime total, today's gain, monthly average
-                   and monthly total. Members counted for only part of the
-                   month are marked (e.g. "· 3d") because their target is
-                   smaller.
+<br>
 
-  Projection       Where each member ends the month at the rate they are
-                   going, coloured against the whole month's quota — so it
-                   warns while there is still time to do something. Someone
-                   who joined mid-month is measured over the days they will
-                   actually have, not the whole month. Settings > Discord &
-                   image turns the column off.
+<img src="docs/promo/sample-board.png" alt="A Club Manager daily leaderboard posted to Discord" width="840">
 
-  Roster alerts    Who joined, who left, and who changed their name since the
-                   last run, on the board and in the log. A departure is only
-                   announced once two runs agree, so a member who simply
-                   missed a day's sync is never reported as having left.
+</div>
 
-  Milestones       A one-off note when a trainer passes a round lifetime
-                   figure (10M, 100M, 1B…) or the club passes one between
-                   everyone. Marks already passed the first time a club is
-                   seen are recorded quietly rather than announced.
+---
 
-  Weekly summary   The last seven days: each member's week total, their best
-                   single day, and how the week sat against quota, over a
-                   chart of the club's gain per day.
+## What it does
 
-  Month in review  When a month closes, its final standings — who made quota,
-                   the club total, and every day charted. Filed in a local
-                   archive that keeps growing after uma.moe has moved on, and
-                   readable again from the Leaderboard page.
+Club Manager is a desktop app for people who run Umamusume clubs. You add your
+club, set the daily fan quota you expect from each member, and it takes over:
+every day it pulls the real figures from uma.moe, works out who is ahead and who
+is behind, renders the leaderboard above, and posts it to your Discord.
 
-  Networks         Group clubs together. A network gets a combined board —
-                   every member from every club in one ranking, each still
-                   measured against their own club's quota — and can post it
-                   to its own webhook.
+You manage everything from a small dashboard that opens in your browser. It runs
+on your own PC — your uma.moe key and your webhooks never leave it — and once
+it's set up you don't have to touch it again.
 
-  Trainers         Look anyone up by UID, profile link or name, for lifetime
-                   totals, month-by-month history, rolling 3/7/30-day gains
-                   and rank. Track the ones you care about to keep a report a
-                   click away, and post reports to Discord.
+The rest of this page walks through everything it can do.
 
-  Head to head     Two trainers side by side, as a table and as an image.
-                   Figures uma.moe has not filled in read "not reported"
-                   rather than counting as a loss.
+---
 
-  Trends           Your club against any other: rank, tier, daily pace, pace
-                   per member, and where each ends the month. Charts for the
-                   daily figures and the running total, both rosters side by
-                   side, and any member openable in place.
+## Reading the board
 
-  Tier ladder      What each tier costs this month, from uma.moe's published
-                   thresholds — fans per day, the same divided by your club
-                   size, and how much harder the tier is being contested than
-                   it was last month. Cutoffs climb all month, so the per-day
-                   rate is the figure to steer by.
+The daily image is the heart of it. Each row is one member, and every column
+answers a specific question at a glance:
 
-  Help &amp; search   A Help page covering every feature, what each column
-                   means, and the things that look like bugs but are not.
-                   The search box in the header reaches pages, clubs,
-                   trainers, settings and help topics — Ctrl+K or /.
+- **Today's total** — their all-time career fan count.
+- **Today's gain** — how many fans they added on the latest completed day.
+- **Carry over** — the one that matters, and the only coloured column: how far
+  ahead of (or behind) their quota they are for the month. **Green** means a
+  full day's cushion, **amber** means positive but thin, **red** means behind.
+  One look down this column tells you exactly who to nudge.
+- **Monthly average** and **Monthly total** — their pace and their running
+  total for the month.
+- **Projected** — where they finish the month *if nothing changes*.
 
-  History          The Leaderboard page can rebuild any past day of this
-                   month or the three before it. Looking back is read straight
-                   from uma.moe and saved nowhere, so it never disturbs what
-                   today's board says.
+Members are ranked by carry-over, so the people pulling their weight sit at the
+top and anyone slipping sinks to the bottom where you'll notice. Names in
+Japanese, Korean and Chinese render correctly. The header carries the club's
+rank and tier; the footer flags how many members are below target.
 
-  Several channels A club, network or trainer can hold more than one webhook.
-                   "Add another webhook" in its editor adds a second (up to
-                   eight) and the same post goes to all of them, so one club
-                   can report into two servers at once. One dead webhook does
-                   not stop the others.
+> **Want a different bar than quota?** Highlight thresholds let you colour any
+> column against a number *you* choose — say, turn "today's gain" green for
+> anyone over 5M — on top of the quota colouring.
 
+---
 
-POSTING ON A SCHEDULE
----------------------
-Three ways; pick one.
+## Catch what's happening in your club
 
-  Built in     Settings > "Post automatically", set a time. Weekly summaries
-               and the month in review have their own days and times.
-               start.bat must be left running.
+**Month-end projection.** Carry-over tells you where a member stands *today*.
+The projection tells you where they'll *end up* at their current pace — so you
+can catch a member who'll miss quota on day 6, with three weeks left to turn it
+around, instead of discovering it on the 31st. Members who joined mid-month are
+measured only over the days they can still be counted for, so joining late never
+looks like failing.
 
-  With Windows Settings > This app > "Start with Windows". Club Manager then
-               starts at sign-in, minimised and without opening a browser, so
-               the built-in schedule survives a reboot. It writes one entry
-               under HKEY_CURRENT_USER and nothing else; turning it off
-               removes it again.
+**Roster alerts.** Every run tells you who **joined**, who **left**, and who
+**changed their name** since last time — right on the board and in the log. No
+more scrolling the member list wondering who vanished. (A departure is only
+announced once two runs agree, so a member who simply missed a sync is never
+wrongly reported gone.)
 
-  Task         Task Scheduler > Create Basic Task > Daily > Start a program >
-  Scheduler    point it at run.bat. Nothing needs to stay open.
-               (run.bat exits with code 2 if the API key is missing.)
+**Milestones.** When a member — or the whole club combined — crosses a round
+lifetime number like 10M, 100M or 1B, Club Manager calls it out. A little
+recognition for the people carrying your rank.
 
-A day is published once it is complete, so the newest data is normally
-yesterday's. If it is not up yet, the run waits and tries again — see
-Settings > Retries.
+---
 
+## The long view
 
-KEEPING A COPY
---------------
-Settings > "Back up your setup" writes one JSON file holding every club,
-network, tracked trainer and setting. An update never touches config.json,
-but nothing else protects it from a lost drive.
+**Weekly summaries.** A separate post covering the last seven days: each
+member's week total, their best single day, and how the week sat against quota.
 
-  Download a backup    everything, including the API key and webhook URLs.
-                       Treat that file like a password.
-  Without secrets      the same, with the key and webhooks removed. Safe to
-                       share or keep in a repository; restoring it leaves the
-                       key and webhooks you already have in place.
+**Month in review.** When a month closes, Club Manager posts the final
+standings — who made quota, the club total, every day charted — and files it in
+a local archive that keeps growing long after uma.moe stops serving it. Your
+club's history becomes *yours*.
 
-Restoring copies your current config.json into data\backups\config first, so
-restoring the wrong file is undoable.
+**Look back at any day.** The Leaderboard page can rebuild the board for any
+past day of this month or the three months before it, exactly as it stood.
+Great for settling "what were we on last Tuesday?" It's read-only and saved
+nowhere, so browsing history never disturbs today's board.
 
+---
 
-UPDATING
---------
-Settings > Updates checks https://github.com/Remezzo/Umamusume-Fan-Tracker for
-a newer release. Installing replaces the program files and leaves config.json,
-catalogue.json, data\ and credentials\ alone; the files being replaced are
-copied into data\backups first. Club Manager can restart itself afterwards —
-the page reconnects on its own.
+## Size up the competition
 
+**Trends — your club vs any other.** Put your club next to a rival and see
+where the real difference is: monthly rank, tier, daily pace, pace *per member*,
+and projected month-end, over two charts — daily gains side by side, and the
+running month-total so you can see whether a gap is opening or closing. Both
+rosters list underneath, and you can open any member in place.
 
-WHAT IS IN THIS FOLDER
-----------------------
-  start.bat              opens the web UI            <- the usual way in
-  setup.bat              installs dependencies       <- run once
-  run.bat                one-shot run, for Task Scheduler
-  uma2_fan_tracker.py    command-line entry point
-  fantracker\            the program
-  webui\                 the web interface (help.js holds the Help content)
-  config.json            your clubs, networks, trainers and settings
-  config.example.json    reference copy
-  catalogue.json         optional: overrides the Suite page's entries
-  data\                  run state, snapshots, rendered images, activity log
-                         (created on first run; safe to delete to start over)
-  data\months\           finished months, one file per club per month
-  data\backups\          the program files an update replaced, and copies of
-                         config.json taken before a restore
+**The tier ladder.** See exactly what every tier — SS, S+, S, all the way down —
+is costing *this month*, straight from uma.moe's own thresholds: the fans-per-day
+you'd need to hold it, and how much harder it's being contested than last month.
+Click any tier to list the clubs sitting in it right now, then click one to
+instantly line it up against yours. Aiming for promotion has never been this
+concrete.
 
+---
 
-REQUIREMENTS
-------------
-  - Python 3.10 or newer
-  - Browser
+## Dig into individual trainers
 
+**Look anyone up** by name or UID — lifetime totals, month-by-month history,
+rolling 3/7/30-day gains and rank, all in one place.
 
-NOTES
------
-  - Keep config.json private: it holds your Discord webhooks and API key.
-  - The web UI listens on 127.0.0.1 only. Nothing on your network reaches it.
-  - The whole folder can be moved or copied anywhere; paths are relative.
-  - Japanese and Korean member names render correctly in the images.
-  - The activity log exports as .txt, .csv or .json — never an archive.
+**Head to head.** Compare two trainers side by side, as a table and as a
+shareable image. Figures uma.moe hasn't filled in read "not reported" rather
+than being counted as a zero, so nobody looks worse than they are.
+
+**Track the ones you care about** to keep their report a click away, and post
+any trainer's report straight to Discord.
+
+---
+
+## Run it your way
+
+**Networks.** Group several clubs into one network and get a single combined
+board — every member from every club in one ranking — while each is still judged
+against their *own* club's quota. Post it to the network's own channel.
+
+**Post anywhere, to anyone.** Give a club, network or trainer more than one
+webhook and the same board goes to every server at once. Add a role **ping** and
+Club Manager wraps the ID for you so it actually notifies (a plain role name
+never does — it handles that gotcha).
+
+**Post on a schedule — three ways:**
+- **Built in** — pick times for the daily, weekly and monthly posts.
+- **Start with Windows** — one toggle and it launches at sign-in, minimised,
+  surviving reboots.
+- **Task Scheduler** — point a task at `ClubManager.exe run` if you prefer.
+
+Or hit **Run now** any time, **Refresh** to re-pull the latest without posting,
+and **Today** to jump the board back to the newest day.
+
+---
+
+## Yours, and easy to keep
+
+- **Private by design.** Everything runs locally. The dashboard listens on
+  `localhost` only; nothing is sent anywhere except the data requests to uma.moe
+  and the boards you post to your own Discord. No account, no cloud, no
+  telemetry.
+- **Backup & restore.** Save your whole setup — clubs, networks, trainers,
+  settings — to one file, with an option that strips the secrets so the copy is
+  safe to share.
+- **A readable activity log** you can export to `.txt`, `.csv` or `.json`.
+- **Search everything** from one box in the header (`Ctrl`+`K`) — jump to any
+  page, club, trainer, setting or help topic.
+- **A full in-app Help page** explaining every feature and the handful of things
+  that look like bugs but aren't.
+- **Self-updating.** It tells you when a new version is out and points you
+  straight to it; your config and data carry across untouched.
+
+---
+
+## Up and running in three minutes
+
+1. **[Download the latest release](https://github.com/Remezzo/Umamusume-Fan-Tracker/releases/latest)**, unzip the folder anywhere, and run **`ClubManager.exe`**. The dashboard opens in your browser.
+2. **Paste a uma.moe API key** — sign in at [uma.moe/settings](https://uma.moe/settings) and generate one. That's the only credential it needs.
+3. **Add your club** (paste its uma.moe link), set the daily quota, drop in a Discord webhook, and hit **Post now**.
+
+No Python, no installer, no dependencies. Set a schedule and walk away.
+
+> **Keep the unzipped files together** — `ClubManager.exe` needs the libraries
+> beside it. Run it from its folder; don't pull the exe out on its own.
+
+---
+
+## Verify your download
+
+Every release ships SHA-256 checksums. From the unzipped folder in PowerShell:
+
+```powershell
+(Get-FileHash ClubManager.exe -Algorithm SHA256).Hash.ToLower()
+```
+
+Match it against `SHA256SUMS.txt`. If they agree, the file is exactly what was
+published.
+
+> **First run:** the app isn't code-signed (certificates cost money a free tool
+> skips), so Windows SmartScreen shows *"Windows protected your PC"* — click
+> **More info → Run anyway**. If your antivirus quarantines it, that's a known
+> false positive with compiled-Python programs, not a real detection; the
+> checksum above proves the file is genuine. Restore it from quarantine or add a
+> folder exclusion.
+
+---
+
+## Requirements
+
+Windows 10 or 11. A free uma.moe account for the API key, and a Discord webhook.
+That's the whole list — everything else is bundled into the download.
+
+## The Icarus Suite
+
+Club Manager is one of a family of local, privacy-respecting Umamusume tools —
+career automation, headless rerolling, live translation and more. The **Suite**
+page inside the app links them all.
+
+## License
+
+Club Manager is proprietary software — © 2026 Remezzo, all rights reserved. You
+may download and use the official release and read the source for reference, but
+you may not reuse, modify or redistribute it. See [LICENSE](LICENSE) for the
+full terms.
