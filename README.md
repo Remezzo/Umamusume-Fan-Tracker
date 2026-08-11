@@ -4,7 +4,7 @@
 
 ### A fan tracker for Umamusume clubs.
 
-It reads your club's numbers from [uma.moe](https://uma.moe) and posts a clean daily
+It reads your club's numbers and posts a clean daily
 fan leaderboard to Discord — automatically, every day, with no spreadsheets and
 nothing to keep open.
 
@@ -17,7 +17,8 @@ Part of the **Icarus Suite**
 
 <br>
 
-<img src="docs/promo/sample-board.png" alt="A Club Manager daily leaderboard posted to Discord" width="840">
+<img width="2180" height="1752" alt="image" src="https://github.com/user-attachments/assets/bb5f60c9-ca97-4003-a5a7-e698b66748ff" />
+
 
 </div>
 
